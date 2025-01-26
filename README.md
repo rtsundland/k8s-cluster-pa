@@ -1,7 +1,7 @@
 # Installation Order
 
-1.  [Cluster](openebs/)
-2.  OpenEBS
+1.  [Cluster](cluster/)
+2.  [OpenEBS](openebs/)
 3.  Metallb
 4.  Prometheus Operator
 5.  Cloudnative Postgres (CNPG)
