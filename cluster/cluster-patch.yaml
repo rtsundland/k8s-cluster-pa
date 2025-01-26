@@ -9,32 +9,6 @@ machine:
   install:
     disk: /dev/vda
     wipe: true
-
-  # START:OPENEBS
-  # this section mounts /dev/vdb to /var/local, sets nr_hugepages, and labels the node as a place for
-  # replicated storage (nodeLabel mayastor)
-  disks:
-    - device: /dev/vdb
-      partitions:
-        - mountpoint: /var/local
-    - device: /dev/vdc
-    
-  sysctls:
-    vm.nr_hugepages: "1024"
-  
-  nodeLabels:
-    openebs.io/engine: "mayastor"
-  
-  kubelet:
-    extraMounts:
-      - destination: /var/local
-        type: bind
-        source: /var/local
-        options:
-          - bind
-          - rshared
-          - rw
-  # END:OPENEBS
   
   certSANs:
     - talos-pa.domain.local
@@ -62,16 +36,5 @@ cluster:
   network:
     dnsDomain: cluster.local
 
-  # START:OPENEBS
-  apiServer:
-    admissionControl:
-      - name: PodSecurity
-        configuration:
-          apiVersion: pod-security.admission.config.k8s.io/v1beta1
-          kind: PodSecurityConfiguration
-          exemptions:
-            namespaces:
-              - openebs
-  # END:OPENEBS
 
   
