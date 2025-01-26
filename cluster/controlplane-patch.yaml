@@ -1,0 +1,37 @@
+machine:
+  # START:LB
+  # this section removes a restriction that allows CP's to use metallb and other LB configurations
+  nodeLabels:
+    node.kubernetes.io/exclude-from-external-load-balancers:
+    $patch: delete
+  # END:LB
+
+  install:
+    disk: /dev/vda
+    wipe: true
+
+  certSANs:
+    - talos-pa.home.sundland.net
+    - 10.6.64.20
+
+  network:
+    interfaces:
+      - interface: ens3
+        dhcp: true
+        vip:
+          ip: 10.6.64.20
+
+    nameservers:
+      - 10.0.1.11
+      - 10.0.1.12
+      - 10.0.1.13
+
+  time:
+    servers:
+      - time.home.sundland.net
+
+cluster:
+  allowSchedulingOnControlPlanes: true
+
+  network:
+    dnsDomain: cluster.local
