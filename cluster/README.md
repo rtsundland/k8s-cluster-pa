@@ -18,17 +18,32 @@ This allows *metallb* LoadBalancers to run on CPs.  By default, this setting is 
 ## VM Configuration
 
 ### Control Plane Nodes
+
+**CPU And Memory**
+
 - CPU: 1x Socket, 4x Cores, 2x Threads
 - CPU Mode: Host Model 
 - Memory: 16GB
-- Disk Configuration:
-  - (1001) Install disk :: /dev/vda :: 100 GiB VirtIO
-  - (1002) Hostpath PVs :: /dev/vdb :: 100 GiB VirtIO
-  - (1003) Replicated PVs :: /dev/vdc :: 250 GiB VirtIO
-- NIC Configuration
-  - (1004) VirtIO :: ens3
-  - (1005) VirtIO :: ens4
-    
+
+**Disk Configuration**
+
+Use *VirtIO* Mode for all Disks
+
+| Disk Description | Order | Talos Device Name | Size |
+|----------|---------|----------|---------- |
+| Install | 1001 | /dev/vda | 100 GiB |
+| Local PVs | 1002 | /dev/vdb | 100 GiB |
+| Replicated PVs | 1003 | /dev/vdc | 250 GiB |
+
+**NIC Configuration**
+
+Use *VirtIO* Mode for all NICs
+
+| Order | Talos Device Name |
+| ----- | ----- |
+| 1004 | ens3 |
+| 1005 | ens4 |
+
 ### Worker Nodes
 - No dedicated Worker nodes
 
