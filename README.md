@@ -1,6 +1,6 @@
 # Installation Order
 
-1.  Cluster
+1.  [Cluster](openebs/)
 2.  OpenEBS
 3.  Metallb
 4.  Prometheus Operator
