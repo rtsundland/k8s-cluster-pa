@@ -1,7 +1,7 @@
 # OpenEBS Installation and Configuration
 
-## Patch Talos Configurtion
-Patch the Talos configuration to provide proper paraemters for OpenEBS to run, mount disks in the correct locations, and assign proper nodes labels.  This patch needs to be run on each node, example for talos-pa-1.  Since the Controlplane and Worker Nodes are the same in this cluster, we're applying both patches to each device:
+## Patch Talos
+Patch the Talos machineconfig to provide proper paraemters for OpenEBS to run, mount disks in the correct locations, and assign proper nodes labels.  This patch needs to be run on each node, example for talos-pa-1.  Since the Controlplane and Worker Nodes are the same in this cluster, we're applying both patches to each device:
 ```
 talosctl patch mc -n 10.6.64.$21 \
   --patch-file controlplane.patch.yaml --patch-file worker.patch.yaml
