@@ -25,7 +25,7 @@ kubectl -n metallb create -f l2advertisements.yaml
 
 ### Admin Pool
 By default, when a service is configured for LoadBalancer, it will be added to the admin-pool and auto-provisioned an IP address by simply specifying:
-```
+```yaml
 apiVersion: v1
 kind: Service
 ...
@@ -34,7 +34,7 @@ spec:
 ```
 
 You can specify an IP address in this pool by providing the proper labels.  Assuming the IP isn't already consumed, of course.
-```
+```yaml
 apiVersion: v1
 kind: Service
 ...
@@ -45,7 +45,7 @@ metadata:
 
 ### App Pool
 When wanting to use a different pool, like *app-pool* you will need to declare it in your annotations such as below.  Since *app-pool* does not automatically allocate an IP address, you will need to supply one too.
-```
+```yaml
 apiVersion: v1
 kind: Service
 ...
