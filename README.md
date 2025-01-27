@@ -3,7 +3,7 @@
 1.  [Cluster](cluster/)
 2.  [OpenEBS](openebs/)
 3.  [Metallb](metallb/)
-4.  Prometheus Operator
+4.  [Prometheus Operator](prometheus-operator/)
 5.  Cloudnative Postgres (CNPG)
 6.  Kubernetes Reflector
 7.  Cert Manager
