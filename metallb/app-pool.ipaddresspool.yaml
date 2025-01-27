@@ -1,0 +1,14 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: app-pool
+  namespace: metallb
+spec:
+  addresses:
+  - 10.6.64.64/26
+  autoAssign: false
+  avoidBuggyIPs: true
+  serviceAllocation:
+    serviceSelectors:
+      - matchExpressions:
+        - { key: audience, operator: In, values: [public] }
