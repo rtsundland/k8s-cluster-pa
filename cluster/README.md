@@ -93,7 +93,7 @@ talosctl kubeconfig --nodes 10.6.64.21 --endpoint 10.6.64.21 --talosconfig=./tal
 
 ## Update endpoints array in talosconfig
 This updates ensures we don't have to add -e <ip> to every talosctl command.
-```
+```yaml
 context: talos-pa
 contexts:
     talos-pa:
