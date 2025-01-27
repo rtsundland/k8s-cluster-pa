@@ -66,5 +66,5 @@ clusterCertificates:
 
 ### Install clusterissuer
 ```
-helm install -n cert-manager clusterissuer oci://tccr.io/truecharts/clusterissuer -f clusterissuer.values.yaml
+helm install -n tc-cert-manager clusterissuer oci://tccr.io/truecharts/clusterissuer -f clusterissuer.values.yaml
 ```
