@@ -87,8 +87,17 @@ talosctl apply-config --insecure -n 10.6.64.21 \
 After bootstrap, we'll grab the kubeconfig to access the cluster via *kubectl*
 
 ```
-talosctl bootstrap --nodes 10.6.64.21 --endpoints 10.6.64.21 --talosconfig=./talosconfig
-talosctl kubeconfig --nodes 10.6.64.21 --endpoints 10.6.64.21 --talosconfig=./talosconfig
+talosctl bootstrap --nodes 10.6.64.21 --endpoint 10.6.64.21 --talosconfig=./talosconfig
+talosctl kubeconfig --nodes 10.6.64.21 --endpoint 10.6.64.21 --talosconfig=./talosconfig
+```
+
+## Update endpoints array in talosconfig
+This updates ensures we don't have to add -e <ip> to every talosctl command.
+```
+context: talos-pa
+contexts:
+    talos-pa:
+        endpoints: [ 10.6.64.21, 10.6.64.22, 10.6.64.23 ]
 ```
 
 ## Deploy Remaining Nodes
@@ -110,5 +119,12 @@ talosctl apply-config --insecure -n 10.6.64.23 \
 ## Verify Node Ready
 ```
 kubectl get nodes
+```
+Output:
+```
+NAME         STATUS   ROLES           AGE     VERSION
+talos-pa-1   Ready    control-plane   2d21h   v1.32.0
+talos-pa-2   Ready    control-plane   2d21h   v1.32.0
+talos-pa-3   Ready    control-plane   2d21h   v1.32.0
 ```
 
