@@ -44,14 +44,14 @@ metadata:
 ```
 
 ### App Pool
-When you want to expose a service using the public app pool, in addition to the above, the service must be configured with a specific label and IP address.  This ensures app services are specifically configured to be public.
+When wanting to use a different pool, like *app-pool* you will need to declare it in your annotations such as below.  Since *app-pool* does not automatically allocate an IP address, you will need to supply one too.
 ```
 apiVersion: v1
 kind: Service
 ...
 metadata:
   annotations:
-    audience: public
+    metallb.universe.tf/address-pool: app-pool
     metallb.universe.tf/loadBalancerIPs: <ip-address>
 ```
 
