@@ -33,7 +33,7 @@ The clusterissuer.values.yaml file contains some configuration information that 
 ### Setup Cloudflare API key
 
 Sets up LetsEncrypt production and staging certificate issuers using Cloudflare verification
-```
+```yaml
 clusterIssuer:
   ACME:
     - name: 'letsencrypt-prod'
@@ -52,7 +52,7 @@ clusterIssuer:
 ### Setup Cluster Wildcard Certificate
 
 Generates a cluster-wide wildcard certificate using production LetsEncrypt that can be used for any services under the domain specified.  Note the replicatedNamespaces parameter will only replicate to namespaces starting with 'tc-' (uses regular expression matching).
-```
+```yaml
 clusterCertificates:
   replicationNamespaces: 'tc-.*'
   certificates:
