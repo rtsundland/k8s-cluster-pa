@@ -1,5 +1,9 @@
 # OpenEBS Installation and Configuration
 
+## Source Documentation
+https://www.talos.dev/v1.9/kubernetes-guides/configuration/storage/
+https://openebs.io/docs/quickstart-guide/installation#installation-via-helm
+
 ## Patch Talos
 Patch the Talos machineconfig to provide proper paraemters for OpenEBS to run, mount disks in the correct locations, and assign proper nodes labels.  This patch needs to be run on each node, example for talos-pa-1.  Since the Controlplane and Worker Nodes are the same in this cluster, we're applying both patches to each device:
 ```
