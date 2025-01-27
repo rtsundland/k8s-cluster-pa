@@ -51,10 +51,10 @@ clusterIssuer:
 
 ### Setup Cluster Wildcard Certificate
 
-Generates a cluster-wide wildcard certificate using production LetsEncrypt that can be used for any services under the domain specified
+Generates a cluster-wide wildcard certificate using production LetsEncrypt that can be used for any services under the domain specified.  Note the replicatedNamespaces parameter will only replicate to namespaces starting with 'tc-' (uses regular expression matching).
 ```
 clusterCertificates:
-  replicationNamespaces: '.*'
+  replicationNamespaces: 'tc-.*'
   certificates:
     - name: home-sundland-net
       enabled: true
