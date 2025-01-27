@@ -1,0 +1,3 @@
+certmanager:
+  dns01RecursiveNameservers: "10.0.1.11:53,10.0.1.12:53,10.0.1.13:53"
+  
