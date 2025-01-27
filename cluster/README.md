@@ -1,7 +1,9 @@
 # Talos Cluster (talos-pa)
 
-*This guide is modified from https://www.talos.dev/v1.9/introduction/getting-started/*
+## Source Documentation
+https://www.talos.dev/v1.9/introduction/getting-started/
 
+## Background
 This cluster is built using TrueNAS virtual machines using the base metal Talos Linux install .iso.  There are 3 nodes that act as both control plane and worker, so certain configuration changes are needed to ensure the CP nodes can also act as workstation nodes that are covered within the **cluster-patch.yaml**.
 
 This path ensures we can run pods on the CPs
