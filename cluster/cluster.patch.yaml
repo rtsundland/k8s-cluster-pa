@@ -1,0 +1,18 @@
+machine:
+  install:
+    disk: /dev/vda
+    wipe: true
+
+  network:
+    interfaces:
+      - interface: ens3
+        dhcp: true
+
+    nameservers:
+      - 10.0.1.11
+      - 10.0.1.12
+      - 10.0.1.13
+
+  time:
+    servers:
+      - time.domain.local
