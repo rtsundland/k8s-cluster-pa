@@ -28,12 +28,12 @@ helm install -n openebs --create-namespace openebs openebs/openebs -f values.yam
 ```
 
 ## Configure Disk Pools for Each Node
-Since each node could be different and Diskpool is node specific configuration, Diskpool configurations have been broken out for each worker node under [by-node](by-node/). 
+Since each node could be different and Diskpool is node specific configuration, Diskpool configurations have been broken out for each worker node under [diskpools](diskpools/). 
 
 Apply the diskpool configurations for each node:
 ```
-kubectl -n openebs create -f by-node/talos_pa_w1.yaml
-kubectl -n openebs create -f by-node/talos_pa_w2.yaml
+kubectl -n openebs create -f diskpools/talos_pa_w1.yaml
+kubectl -n openebs create -f diskpools/talos_pa_w2.yaml
 ...
 ```
 ### Current Diskpool Configurations
@@ -42,7 +42,12 @@ There are currently two diskpools that are labeled by the zpool they are configu
 - vader (spinny disk storage)
 
 ## Configure Storage Class
-The storage class makes use of the diskpool previous configured and sets it as the default.
+The storage class makes use of the diskpool previous configured and sets it as the default.  To import all:
 ```
-kubectl -n openebs create -f app-default.storageclass.yaml
+kubectl -n openebs create -f storageclass/
 ```
+Or to just import one:
+```
+kubectl -n openebs create -f storageclass/kenobi-single.storageclass.yaml
+```
+
