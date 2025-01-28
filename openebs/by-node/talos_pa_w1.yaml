@@ -1,9 +1,8 @@
-#
-# configuration for workers; they should all look the same
+
 apiVersion: "openebs.io/v1beta2"
 kind: DiskPool
 metadata:
-  name: talos_pa_w1_v1
+  name: talos-pa-w1-v1
   namespace: openebs
 spec:
   node: talos-pa-w1
@@ -11,13 +10,13 @@ spec:
   topology:
     labelled:
       zpool: kenobi
-      
+
 ---
 
 apiVersion: "openebs.io/v1beta2"
 kind: DiskPool
 metadata:
-  name: talos_pa_w1_v2
+  name: talos-pa-w1-v2
   namespace: openebs
 spec:
   node: talos-pa-w1
