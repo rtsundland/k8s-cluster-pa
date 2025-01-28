@@ -3,6 +3,7 @@ machine:
     disk: /dev/vda
     wipe: true
 
+  network:
     nameservers:
       - 10.0.1.11
       - 10.0.1.12
