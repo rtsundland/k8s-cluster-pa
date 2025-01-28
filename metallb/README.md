@@ -12,6 +12,15 @@ helm repo add metallb https://metallb.github.io/metallb
 helm install metallb metallb/metallb -n metallb --create-namespace
 ```
 
+## Create metallb Namespace with proper permissions
+```
+kubectl create namespace metallb
+kubectl label namespace metallb  \
+  pod-security.kubernetes.io/enforce=privileged \
+  pod-security.kubernetes.io/audit=privileged \
+  pod-security.kubernetes.io/warn=privileged
+```
+
 ## Add IP Address Pools
 ```
 kubectl -n metallb create -f app-pool.ipaddresspool.yaml -f admin-pool.ipaddresspool.yaml
