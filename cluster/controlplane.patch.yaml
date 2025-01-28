@@ -5,11 +5,6 @@ machine:
   #  node.kubernetes.io/exclude-from-external-load-balancers:
   #  $patch: delete
   # END:LB
-
-  install:
-    disk: /dev/vda
-    wipe: true
-
   network:
     interfaces:
       - interface: ens3
