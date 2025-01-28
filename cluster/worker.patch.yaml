@@ -3,3 +3,10 @@ machine:
     interfaces:
       - interface: ens3
         dhcp: true
+
+  sysctls:
+    # openebs
+    vm.nr_hugepages: "1024"
+  nodeLabels:
+    # openebs
+    openebs.io/engine: "mayastor"
