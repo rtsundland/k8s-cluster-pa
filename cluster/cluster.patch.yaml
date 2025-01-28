@@ -11,4 +11,4 @@ machine:
 
   time:
     servers:
-      - time.domain.local
+      - time.home.sundland.net

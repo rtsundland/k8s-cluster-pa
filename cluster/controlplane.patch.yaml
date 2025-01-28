@@ -12,6 +12,16 @@ machine:
         vip:
           ip: 10.6.64.20
 
+  kubelet:
+    extraMounts:
+      - destination: /var/local
+        type: bind
+        source: /var/local
+        options:
+          - bind
+          - rshared
+          - rw
+
 cluster:
   apiServer:
     admissionControl:

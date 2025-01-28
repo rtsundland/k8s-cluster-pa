@@ -89,8 +89,8 @@ talosctl apply-config --insecure -n 10.6.64.21 \
 After initializing all the control plane nodes, we'll bootstrap the cluster on one node and grab the kubeconfig to access the cluster via *kubectl*
 
 ```
-talosctl bootstrap --nodes 10.6.64.21 --endpoint 10.6.64.21 --talosconfig=./talosconfig
-talosctl kubeconfig --nodes 10.6.64.21 --endpoint 10.6.64.21 --talosconfig=./talosconfig
+talosctl bootstrap --nodes 10.6.64.21 --endpoints 10.6.64.21 --talosconfig=./talosconfig
+talosctl kubeconfig --nodes 10.6.64.21 --endpoints 10.6.64.21 --talosconfig=./talosconfig
 ```
 
 ## Update endpoints array in talosconfig
