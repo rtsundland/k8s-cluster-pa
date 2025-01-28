@@ -5,7 +5,7 @@ https://www.talos.dev/v1.9/kubernetes-guides/configuration/storage/
 https://openebs.io/docs/quickstart-guide/installation#installation-via-helm
 
 ## Patch Talos
-Ensure the talos machine configuration has the following patch applied.  This should be done within the cluster build
+Ensure the talos machine configuration has the following patch applied.  This should be done within the cluster build.  This yaml is saved as *worker.patch.yaml* here.
 ```
 machine:
   sysctls:
