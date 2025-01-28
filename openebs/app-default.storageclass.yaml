@@ -1,10 +1,9 @@
 #
-# creates a storageclass (and makes it default) using the app-pool diskpool with 2 replicated PVs
-#
+# kenobi-tier-1a: creates a storageclass on our NVME disks with 2x replication
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: apps-default
+  name: kenobi-tier-1a
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
 parameters:
@@ -14,5 +13,60 @@ parameters:
   thin: "true"
   allowVolumeExpansion: "true"
   poolAffinityTopologyLabel: |
-    drivetype: nvme
+    zpool: kenobi
 provisioner: io.openebs.csi-mayastor
+
+#
+# kenobi-tier-1b: creates a storageclass on our NVME disks without replication
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: kenobi-tier-1b
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+parameters:
+  protocol: nvmf
+  repl: "1"
+  fsType: "xfs"
+  thin: "true"
+  allowVolumeExpansion: "true"
+  poolAffinityTopologyLabel: |
+    zpool: kenobi
+provisioner: io.openebs.csi-mayastor
+
+#
+# vader-tier-2a: creates a storageclass on our HDD pool with 2x replication
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: vader-tier-2a
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+parameters:
+  protocol: nvmf
+  repl: "2"
+  fsType: "xfs"
+  thin: "true"
+  allowVolumeExpansion: "true"
+  poolAffinityTopologyLabel: |
+    zpool: vader
+provisioner: io.openebs.csi-mayastor
+
+#
+# vader-tier-2b: creates a storageclass on our HDD pool with no replication
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: vader-tier-2b
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+parameters:
+  protocol: nvmf
+  repl: "1"
+  fsType: "xfs"
+  thin: "true"
+  allowVolumeExpansion: "true"
+  poolAffinityTopologyLabel: |
+    zpool: vader
+provisioner: io.openebs.csi-mayastor
+
