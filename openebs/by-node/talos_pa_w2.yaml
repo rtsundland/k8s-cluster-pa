@@ -3,7 +3,7 @@
 apiVersion: "openebs.io/v1beta2"
 kind: DiskPool
 metadata:
-  name: talos_pa_w2_v1
+  name: talos-pa-w2-v1
   namespace: openebs
 spec:
   node: talos-pa-w2
@@ -17,7 +17,7 @@ spec:
 apiVersion: "openebs.io/v1beta2"
 kind: DiskPool
 metadata:
-  name: talos_pa_w2_v2
+  name: talos-pa-w2-v2
   namespace: openebs
 spec:
   node: talos-pa-w2
