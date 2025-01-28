@@ -2,17 +2,23 @@
 
 ## Source Documentation
 https://www.talos.dev/v1.9/kubernetes-guides/configuration/storage/
+
 https://openebs.io/docs/quickstart-guide/installation#installation-via-helm
 
-## Patch Talos
-Ensure the talos machine configuration has the following patch applied.  This should be done within the cluster build.  This yaml is saved as *worker.patch.yaml* here.
-```
-machine:
-  sysctls:
-    vm.nr_hugepages: "1024"
-  nodeLabels:
-    openebs.io/engine: "mayastor"
-```
+## Apply Talos Patches
+If not already applied, there are two Talos patches that need to be applied to both the CP and work nodes.  This should've already been done during the cluster build, but best check to ensure they are applied here:
+
+### Control Plane
+> [!Note]
+> Apply to each control plane node
+
+`talosctl patch mc -p @talos/controlplane.patch.yaml`
+
+### Worker
+> [!Note]
+> Apply to each worker node
+
+`talosctl patch mc -p @talos/worker.patch.yaml`
 
 ## Install Helm Chart
 ```
