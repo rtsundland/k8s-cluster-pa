@@ -6,5 +6,5 @@
 4.  [Prometheus Operator](prometheus-operator/)
 6.  [Cert-Manager/ClusterIssuer/Kubernetes Reflector](cert-manager/)
 7.  [Traefik](traefik/)
-8.  Cloudnative Postgres (CNPG)
+8.  [Cloudnative Postgres (CNPG)](cnpg/)
 9.  Apps
