@@ -60,7 +60,7 @@ Instructions for building a fresh Talos cluster can be found here: https://www.t
 ## Generate the Cluster Configuration
 
 ```
-talosctl gen config talos-pa https://talos-pa.domain.local --config-patch cluster-patch.yaml
+talosctl gen config talos-pa https://talos-pa.domain.local --config-patch @cluster-patch.yaml
 ```
 ## Boot VM's
 
@@ -72,13 +72,14 @@ The VM's will boot with DHCP, if static leases are not configured, you'll need t
 | talos-pa-2 | 10.6.64.22 |
 | talos-pa-3 | 10.6.64.23 |
 
-## Deploy First Node
+## Deploy First Control Plane Node
 
 For each node within the cluster, apply the generated *controlplane.yaml* to each node (repeat for each node/hostname/ip)
 
 ```
 talosctl apply-config --insecure -n 10.6.64.21 \
-  --config-patch '[{"op": "add", "path": "/machine/network/hostname", "value": "talos-pa-1"}]' \
+  --config-patch @controlplane-patch.yaml \
+  --config-patch '[{"op": "add", "path": "/machine/network/hostname", "value": "talos-pa-c1"}]' \
   --file controlplane.yaml
 ```
 
@@ -105,6 +106,7 @@ contexts:
 **talos-pa-2**
 ```
 talosctl apply-config --insecure -n 10.6.64.22 \
+  --config-patch @controlplane-patch.yaml \
   --config-patch '[{"op": "add", "path": "/machine/network/hostname", "value": "talos-pa-2"}]' \
   --file controlplane.yaml
 ```
@@ -112,6 +114,7 @@ talosctl apply-config --insecure -n 10.6.64.22 \
 **talos-pa-3**
 ```
 talosctl apply-config --insecure -n 10.6.64.23 \
+  --config-patch @controlplane-patch.yaml \
   --config-patch '[{"op": "add", "path": "/machine/network/hostname", "value": "talos-pa-3"}]' \
   --file controlplane.yaml
 ```
