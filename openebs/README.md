@@ -27,19 +27,29 @@ helm repo update
 helm install -n openebs --create-namespace openebs openebs/openebs -f values.yaml
 ```
 
-## Configure Disk Pools for Each Node
-Since each node could be different and Diskpool is node specific configuration, Diskpool configurations have been broken out for each worker node under [diskpools](diskpools/). 
+## Disk Pools
 
-Apply the diskpool configurations for each node:
-```
-kubectl -n openebs create -f diskpools/talos_pa_w1.yaml
-kubectl -n openebs create -f diskpools/talos_pa_w2.yaml
-...
-```
 ### Current Diskpool Configurations
 There are currently two diskpools that are labeled by the zpool they are configured on within TrueNAS
 - kenobi (nvme storage)
 - vader (spinny disk storage)
+
+
+### Configure Disk Pools for Each Node
+Since each node could be different and Diskpool is node specific configuration, Diskpool configurations have been broken out for each worker node under [diskpools](diskpools/). 
+
+Import all diskpool configurations:
+```
+kubectl -n openebs create -f diskpools/
+```
+
+Or import one at a time:
+> [!Note]
+> Run this for every node/file.
+
+```
+kubectl -n openebs create -f diskpools/talos_pa_w1.yaml
+```
 
 ## Configure Storage Class
 The storage class makes use of the diskpool previous configured and sets it as the default.  To import all:
