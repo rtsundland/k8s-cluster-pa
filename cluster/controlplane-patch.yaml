@@ -9,10 +9,6 @@ machine:
   install:
     disk: /dev/vda
     wipe: true
-  
-  certSANs:
-    - talos-pa.domain.local
-    - 10.6.64.20
 
   network:
     interfaces:
@@ -31,7 +27,7 @@ machine:
       - time.domain.local
 
 cluster:
-  allowSchedulingOnControlPlanes: true
+  # allowSchedulingOnControlPlanes: true
 
   network:
     dnsDomain: cluster.local
