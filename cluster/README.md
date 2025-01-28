@@ -60,7 +60,7 @@ Instructions for building a fresh Talos cluster can be found here: https://www.t
 ## Generate the Cluster Configuration
 
 ```
-talosctl gen config talos-pa https://talos-pa.domain.local --config-patch @cluster-patch.yaml
+talosctl gen config talos-pa https://talos-pa.domain.local
 ```
 ## Boot VM's
 
@@ -72,20 +72,21 @@ The VM's will boot with DHCP, if static leases are not configured, you'll need t
 | talos-pa-2 | 10.6.64.22 |
 | talos-pa-3 | 10.6.64.23 |
 
-## Deploy First Control Plane Node
+## Deploy Control Plane Nodes
 
-For each node within the cluster, apply the generated *controlplane.yaml* to each node (repeat for each node/hostname/ip)
+Initialize each *control plane* node within the cluster, applying the proper configuration changes.  Repeat for each control plane node in the cluster, replacing the hostname and IP address accordingly.
 
 ```
 talosctl apply-config --insecure -n 10.6.64.21 \
-  --config-patch @controlplane-patch.yaml \
+  --config-patch @cluster.patch.yaml \
+  --config-patch @controlplane.patch.yaml \
   --config-patch '[{"op": "add", "path": "/machine/network/hostname", "value": "talos-pa-c1"}]' \
   --file controlplane.yaml
 ```
 
 ## Bootstrap the Cluster
 
-After bootstrap, we'll grab the kubeconfig to access the cluster via *kubectl*
+After initializing all the control plane nodes, we'll bootstrap the cluster on one node and grab the kubeconfig to access the cluster via *kubectl*
 
 ```
 talosctl bootstrap --nodes 10.6.64.21 --endpoint 10.6.64.21 --talosconfig=./talosconfig
@@ -101,24 +102,6 @@ contexts:
         endpoints: [ 10.6.64.21, 10.6.64.22, 10.6.64.23 ]
 ```
 
-## Deploy Remaining Nodes
-
-**talos-pa-2**
-```
-talosctl apply-config --insecure -n 10.6.64.22 \
-  --config-patch @controlplane-patch.yaml \
-  --config-patch '[{"op": "add", "path": "/machine/network/hostname", "value": "talos-pa-2"}]' \
-  --file controlplane.yaml
-```
-
-**talos-pa-3**
-```
-talosctl apply-config --insecure -n 10.6.64.23 \
-  --config-patch @controlplane-patch.yaml \
-  --config-patch '[{"op": "add", "path": "/machine/network/hostname", "value": "talos-pa-3"}]' \
-  --file controlplane.yaml
-```
-
 ## Verify Node Ready
 ```
 kubectl get nodes
@@ -131,3 +114,13 @@ talos-pa-2   Ready    control-plane   2d21h   v1.32.0
 talos-pa-3   Ready    control-plane   2d21h   v1.32.0
 ```
 
+## Deploy Worker Nodes
+Worker nodes are deployed in a similar manner, except replacing the *controlplane.patch.yaml* with *worker.patch.yaml* and *controlplane.yaml* with *worker.yaml*.  Deploy as many workers as needed.
+
+```
+talosctl apply-config --insecure -n 10.6.64.21 \
+  --config-patch @cluster.patch.yaml \
+  --config-patch @worker.patch.yaml \
+  --config-patch '[{"op": "add", "path": "/machine/network/hostname", "value": "talos-pa-w1"}]' \
+  --file worker.yaml
+```
