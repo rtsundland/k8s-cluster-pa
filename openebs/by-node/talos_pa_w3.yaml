@@ -1,0 +1,27 @@
+#
+# configuration for workers; they should all look the same
+apiVersion: "openebs.io/v1beta2"
+kind: DiskPool
+metadata:
+  name: talos_pa_w3_v1
+  namespace: openebs
+spec:
+  node: talos-pa-w3
+  disks: ["aio:///dev/vdb"]
+  topology:
+    labelled:
+      zpool: kenobi
+      
+---
+
+apiVersion: "openebs.io/v1beta2"
+kind: DiskPool
+metadata:
+  name: talos_pa_w3_v2
+  namespace: openebs
+spec:
+  node: talos-pa-w3
+  disks: ["aio:///dev/vdc"]
+  topology:
+    labelled:
+      zpool: vader
