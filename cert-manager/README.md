@@ -13,18 +13,23 @@ This is an installation of 3 different charts to enable automatic certificate ge
 
 All three charts are installed from the TrueCharts project
 
+## Create Namespace
+```
+kubectl create ns tc-cert-manager
+```
+
 ## Install kubernetes-reflector
 ```
-helm install -n default kubernetes-reflector ci://tccr.io/truecharts/kubernetes-reflector
+helm install -n default kubernetes-reflector oci://tccr.io/truecharts/kubernetes-reflector
 ```
 ## Install cert-manager
 ```
-helm install -n tc-cert-manager --create-namespace cert-manager oci://tccr.io/truecharts/cert-manager
+helm install -n tc-cert-manager cert-manager oci://tccr.io/truecharts/cert-manager
 ```
 
 If we want to overwrite the dns01 nameservers, we can use **cert-manager.values.yaml**
 ```
-helm install -n tc-cert-manager --create-namespace cert-manager oci://tccr.io/truecharts/cert-manager -f cert-manager.values.yaml
+helm install -n tc-cert-manager cert-manager oci://tccr.io/truecharts/cert-manager -f cert-manager.values.yaml
 ```
 
 ## Setup ACME w/ LetsEncrypt
