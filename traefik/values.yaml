@@ -4,7 +4,7 @@ service:
   tcp:
     annotations:
       metallb.io/address-pool: app-pool
-      metallb.io/loadBalancerIPs: 10.6.64.70
+      metallb.io/loadBalancerIPs: 10.6.64.50
 
 #
 # sets the default certificate to the one created by clusterissuer
@@ -12,4 +12,4 @@ service:
 tlsStore:
   default:
     defaultCertificate:
-      secretName: certificate-issuer-domain-local
+      secretName: certificate-issuer-apps-cluster-cert

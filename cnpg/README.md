@@ -15,15 +15,17 @@ helm upgrade --install cnpg \
 ## Create Test Cluster
 ```
 cat <<EOF | kubectl apply -f -
-# Example of PostgreSQL cluster
-apiVersion: postgresql.cnpg.io/v1
-kind: Cluster
-metadata:
-  name: cluster-example
-spec:
-  instances: 3
-  storage:
-    size: 1Gi
+  # Example of PostgreSQL cluster
+  apiVersion: postgresql.cnpg.io/v1
+  kind: Cluster
+  metadata:
+    name: cluster-example
+  spec:
+    instances: 3
+    storage:
+      size: 1Gi
+      storageClass: kenobi-single # this is optional but for clusters probably preferred
+
 EOF
 ```
 

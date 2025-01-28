@@ -1,0 +1,27 @@
+operator:
+  cert-manager:
+    namespace: tc-cert-manager
+
+clusterIssuer:
+  ACME: 
+    - name: 'letsencrypt-prod'
+      server: 'https://acme-v02.api.letsencrypt.org/directory'
+      email: "raymond@sundland.com"
+      type: "cloudflare"
+      cfapitoken: "CloTckCXomMEX-keWZCv584sLetdtEvU2j-1b375"
+
+    - name: 'letsencrypt-staging'
+      server: 'https://acme-staging-v02.api.letsencrypt.org/directory'
+      email: "raymond@sundland.com"
+      type: "cloudflare"
+      cfapitoken: "CloTckCXomMEX-keWZCv584sLetdtEvU2j-1b375"
+
+clusterCertificates:
+  replicationNamespaces: 'tc-.*'
+  certificates:
+    - name: apps-cluster-cert
+      enabled: true
+      certificateIssuer: letsencrypt-prod
+      hosts:
+        - 'apps.home.sundland.net'
+        - '*.apps.home.sundland.net'

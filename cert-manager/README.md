@@ -33,11 +33,14 @@ helm install -n tc-cert-manager cert-manager oci://tccr.io/truecharts/cert-manag
 ```
 
 ## Setup ACME w/ LetsEncrypt
-The clusterissuer.values.yaml file contains some configuration information that must be modified before installing.
+The file *clusterissuer.values.yaml-template* contains the outline of how to creatre certificatre issuers for Letsencrypt, prod and staging, using Cloudflare as a domain authenticator.  Specific credentials need to be obtained from Cloudflare and updated before installing *clusterissuer*.
+
+```
+cp clusterissuer.values.yaml-template clusterissuer.values.yaml
+```
 
 ### Setup Cloudflare API key
-
-Sets up LetsEncrypt production and staging certificate issuers using Cloudflare verification
+Modify *clusterissuer.values.yaml* to include the necessary credentials for Cloudflare verification
 ```yaml
 clusterIssuer:
   ACME:
@@ -55,13 +58,15 @@ clusterIssuer:
 ```
 
 ### Setup Cluster Wildcard Certificate
+Modify *clusterissuer.values.yaml* with the cluster-wide certificate you want to generate for your cluster, or comment it out, I don't care.
 
-Generates a cluster-wide wildcard certificate using production LetsEncrypt that can be used for any services under the domain specified.  Note the replicatedNamespaces parameter will only replicate to namespaces starting with 'tc-' (uses regular expression matching).
+When setup, upon installation of *clusterissuer* it will attempt to register this certificate with ACME and then *kubernetes-reflector* will copy it everywhere.
+
 ```yaml
 clusterCertificates:
   replicationNamespaces: 'tc-.*'
   certificates:
-    - name: home-sundland-net
+    - name: domain-local
       enabled: true
       certificateIssuer: letsencrypt-prod
       hosts:
