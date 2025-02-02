@@ -15,4 +15,5 @@ parameters:
   poolAffinityTopologyLabel: |
     zpool: vader
 provisioner: io.openebs.csi-mayastor
+reclaimPolicy: Retain
 allowVolumeExpansion: true
