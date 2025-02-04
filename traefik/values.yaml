@@ -1,3 +1,7 @@
+ingressClass:
+  # true is not unit-testable yet, pending https://github.com/rancher/helm-unittest/pull/12
+  enabled: true
+  isDefaultClass: true
 #
 # configures the traefik-tcp pod to use app-pool and specific IP address
 service:
