@@ -61,3 +61,28 @@ Or to just import one:
 kubectl -n openebs create -f storageclass/kenobi-single.storageclass.yaml
 ```
 
+# Troubleshooting
+
+## Orphaned Snapshots
+Snapshots can be orphaned when you do bad things.  You can identify snapshots running:
+```
+kubectl -n openebs mayastor get volume-snapshots
+```
+Output looks like:
+```
+ ID                                    TIMESTAMP             SOURCE-SIZE  ALLOCATED-SIZE  TOTAL-ALLOCATED-SIZE  SOURCE-VOL                            RESTORES  SNAPSHOT_REPLICAS
+ 1151a80d-7913-4cb2-9d44-83d4b6601294  2025-01-31T11:22:05Z  20GiB        15.6GiB         15.6GiB               5f1ac57b-fb0d-4170-acfe-fd0b4d593b58  0         2
+ 2d672751-aa34-4290-a140-4fa9af65bffc  2025-02-04T17:05:16Z  20GiB        3.4GiB          19GiB                 5f1ac57b-fb0d-4170-acfe-fd0b4d593b58  0         2
+```
+
+Should be able to match up the SOURCE-VOL column to a volume running:
+```
+kubectl -n openebs mayastor get volumes
+```
+
+If no matching volume exists, it may be orphaned.  Deleting the orphaned snapshots must be done through the API:
+```
+k -n openebs port-forward svc/openebs-api-rest 8081:8081
+curl -X DELETE 'http://localhost:8081/v0/volumes/snapshots/xxxxxxxxx'
+```
+... where xxxxxxxx is the ID of the snapshot
