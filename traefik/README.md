@@ -35,3 +35,10 @@ traefik           ClusterIP      10.107.232.184   <none>        9000/TCP        
 traefik-metrics   ClusterIP      10.103.209.81    <none>        9180/TCP                     9h
 traefik-tcp       LoadBalancer   10.103.203.158   10.6.64.70    80:32372/TCP,443:32726/TCP   9h
 ```
+
+## Create an ingress for the dashboard
+This creates an ingress to service/traefik to review the dashboard.
+```
+kubectl -n tc-traefik create -f dashboard.ingress.yaml
+```
+

@@ -11,9 +11,9 @@ spec:
   ingressClassName: "traefik"
   tls:
     - hosts:
-      - traefik.apps.home.sundland.net
+      - traefik.domain.local
   rules:
-    - host: traefik.apps.home.sundland.net
+    - host: traefik.domain.local
       http:
         paths:
           - path: /
