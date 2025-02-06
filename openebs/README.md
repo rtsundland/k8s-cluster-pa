@@ -61,6 +61,13 @@ Or to just import one:
 kubectl -n openebs create -f storageclass/kenobi-single.storageclass.yaml
 ```
 
+## Configure the default snapshot class
+This configures OpenEBS to create snapshots of the mayastor PV volumes class.  This is used later within Velero to create snapshots.
+```
+kubectl apply -f volumesnapshotclass/default.volumesnapshotclass.yaml
+```
+The `deletionPolicy` on this is set to Retain by default.  This means the snapshots will be retained unless specifically deleted.
+
 # Troubleshooting
 
 ## Orphaned Snapshots
