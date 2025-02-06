@@ -27,6 +27,12 @@ helm repo update
 helm install -n openebs --create-namespace openebs openebs/openebs -f values.yaml
 ```
 
+## Install the kubectl plugin
+The mayastor plugin for kubectl provides additional commands and views into the data kept within OpenEBS.  The plugin can be obtained from:
+
+https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/kubectl-plugin
+
+
 ## Disk Pools
 
 ### Current Diskpool Configurations
