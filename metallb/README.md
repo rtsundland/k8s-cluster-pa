@@ -49,7 +49,7 @@ kind: Service
 ...
 metadata:
   annotations:
-    metallb.universe.tf/loadBalancerIPs: <ip-address>
+    metallb.io/loadBalancerIPs: <ip-address>
 ```
 
 ### App Pool
@@ -60,7 +60,7 @@ kind: Service
 ...
 metadata:
   annotations:
-    metallb.universe.tf/address-pool: app-pool
-    metallb.universe.tf/loadBalancerIPs: <ip-address>
+    metallb.io/address-pool: app-pool
+    metallb.io/loadBalancerIPs: <ip-address>
 ```
 
