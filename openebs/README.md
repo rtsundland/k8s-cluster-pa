@@ -76,6 +76,38 @@ The `deletionPolicy` on this is set to Retain by default.  This means the snapsh
 
 # Troubleshooting
 
+## Orphaned Volumes
+When a PV is removed, it will sometimes leave orphaned volumes.  Volumes can be found within OpenEBS running the following command:
+```
+kubectl -n openebs mayastor get volumes
+```
+
+Output:
+```
+ ID                                    REPLICAS  TARGET-NODE  ACCESSIBILITY  STATUS  SIZE     THIN-PROVISIONED  ALLOCATED  SNAPSHOTS  SOURCE
+ 0b3638a2-5798-4aa0-bb84-b4680408ae88  2         <none>       <none>         Online  18.6GiB  true              8MiB       0          <none>
+ 7eb302c6-7b36-4405-9c91-53f7910d434a  2         talos-pa-w2  nvmf           Online  20GiB    true              14.8GiB    1          <none>
+ abd94922-f787-4023-a0c7-15198922658f  2         <none>       <none>         Online  20GiB    true              92MiB      0          <none>
+```
+
+The ID reported in this output corresponds directly to an existing PV, e.g. *7eb302c6-7b36-4405-9c91-53f7910d434a* will be named pvc-*7eb302c6-7b36-4405-9c91-53f7910d434a*
+```
+kubectl get -A persistentvolume/pvc-7eb302c6-7b36-4405-9c91-53f7910d434a
+``
+will have an output like:
+```
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                                      STORAGECLASS        VOLUMEATTRIBUTESCLASS   REASON   AGE
+pvc-7eb302c6-7b36-4405-9c91-53f7910d434a   20Gi       RWO            Retain           Bound    somens/somepod   													some-storage	<unset>                          23h
+```
+
+In this case, *0b3638a2-5798-4aa0-bb84-b4680408ae88* and *abd94922-f787-4023-a0c7-15198922658f* are both orphaned since there is no existing PV. 
+
+Deleting these orphaned volumes requires setting up a port forwarding to the OpenEBS API and deleting using curl where xxxxxxxxx is the ID of the volume:
+```
+k -n openebs port-forward svc/openebs-api-rest 8081:8081
+curl -X DELETE 'http://localhost:8081/v0/volumes/xxxxxxxxx'
+```
+
 ## Orphaned Snapshots
 Snapshots can be orphaned when you do bad things.  You can identify snapshots running:
 ```
