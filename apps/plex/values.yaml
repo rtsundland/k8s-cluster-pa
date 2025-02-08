@@ -1,0 +1,117 @@
+# Use Traefik INgressRoute defined in plex.ingressroute.yaml
+ingress:
+  enabled: false
+
+pms:
+  # -- The storage class to use when provisioning the pms config volume
+  # this needs to be created manually, null will use the default
+  storageClassName: kenobi-replicated
+
+  # -- The volume size to provision for the PMS database
+  configStorage: 20Gi
+
+  # -- Name of an existing `PersistentVolumeClaim` for the PMS database
+  # NOTE: When set, 'configStorage' and 'storageClassName' are ignored.
+  configExistingClaim: ""
+
+  # -- Add kubernetes liveness probe to pms container.
+  livenessProbe:
+    httpGet:
+      path: /identity
+      port: 32400
+    initialDelaySeconds: 60
+    periodSeconds: 60
+    timeoutSeconds: 1
+    failureThreshold: 3
+
+  # -- Add kubernetes readiness probe to pms container.
+  readinessProbe:
+    httpGet:
+      path: /identity
+      port: 32400
+    initialDelaySeconds: 60
+    periodSeconds: 60
+    timeoutSeconds: 1
+    failureThreshold: 3
+
+# -- A basic image that will convert the configmap to a file in the rclone config volume
+# this is ignored if rclone is not enabled
+initContainer:
+  script: |-
+    #!/bin/sh
+
+    if [ ! -f "/backup/.restore" ]
+    then  echo "[initContainer] performing normal startup"
+          exit 0
+    fi
+
+    # get the restore targz from /backup/forcerestore
+    BACKUPFILE="/backup/$(cat /backup/.restore)"
+    echo "[initContainer] restoring from backup file: ${BACKUPFILE}"
+    if [ ! -f "${BACKUPFILE}" ]
+    then  echo "[initContainer] backup file does not exist or not readable"
+          exit 0
+    fi
+
+    # if /config/Library exists, we will relocate it with a timestamp
+    if [ -d "/config/Library" ]
+    then  RELOTS=$(date +%Y%m%d-%H%M%S)
+          mv -f "/config/Library" "/config/Library.${RELOTS}"
+    fi
+
+    tar -zvxf "${BACKUPFILE}" -C /config && rm -f "/backup/.restore"
+
+    echo "[initContainer] restore complete"
+
+service:
+  type: LoadBalancer
+  port: 32400
+
+  annotations:
+    metallb.universe.tf/address-pool: app-pool
+    metallb.universe.tf/loadBalancerIPs: 10.6.64.51
+
+  # Port to use when type of service is "NodePort" (32400 by default)
+  # nodePort: 32400
+
+  # when NodePort is used, plex is unable to determine user IP
+  # all traffic seems to come from within the cluster
+  # setting this to 'Local' will allow Plex to determine the actual IP of user.
+  # used to determine bitrate for remote transcoding
+  # but the pods can only be accessed by the Node IP where the pod is running
+  # Read more here: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  # https://access.redhat.com/solutions/7028639
+  # externalTrafficPolicy: Local
+
+
+extraEnv: {}
+# extraEnv:
+# This claim is optional, and is only used for the first startup of PMS
+# The claim is obtained from https://www.plex.tv/claim/ is is only valid for a few minutes
+#   PLEX_CLAIM: "claim"
+#   HOSTNAME: "PlexServer"
+#   TZ: "Etc/UTC"
+#   PLEX_UPDATE_CHANNEL: "5"
+#   PLEX_UID: "uid of plex user"
+#   PLEX_GID: "group id of plex user"
+# a list of CIDRs that can use the server without authentication
+  # this is only used for the first startup of PMS
+#   ALLOWED_NETWORKS: "0.0.0.0/0"
+
+extraVolumeMounts:
+  - name: media
+    mountPath: /media
+  - name: backup
+    mountPath: /backup
+
+# -- Optionally specify additional volume mounts for the PMS and init containers.
+extraVolumes: 
+  - name: backup
+    nfs:
+      server: 10.6.64.10
+      path: /mnt/vader/backups/plex
+
+  - name: media
+    nfs:
+      server: 10.6.64.10
+      path: /mnt/vader/media/library
