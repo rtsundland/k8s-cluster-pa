@@ -18,5 +18,5 @@ kubectl apply -f plex.ingressroute.yaml
 ## Notes
 The initContainer script is configured to look file a file called `/backup/.restore`.  If this file exists, it will read the name of the backup file from `/backup/.restore`, prepend `/backup` and extract the gzip'd tarball into the /config directory.  The archive should be created starting from the `Library/` path down.  The old `Library/` subpath will be renamed with an appended date, just in case.
 
-[!Warning]
+> [!WARNING]
 > This will replace any existing configuration, so should only be used on startup of a new instance, migrations, or extreme emergencies.
