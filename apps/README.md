@@ -32,8 +32,8 @@ spec:
 Pending
 
 ```
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
   name: plex-config
   namespace: plex

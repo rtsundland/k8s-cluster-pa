@@ -1,0 +1,25 @@
+
+persistence:
+  config:
+    type: pvc
+    existingClaim: radarr-config
+
+  downloads:
+    enabled: true
+    type: nfs
+    server: 10.6.64.10
+    path: /mnt/vader/media/downloads
+    targetSelector:
+      main:
+        main:
+          mountPath: /downloads
+
+  media:
+    enabled: true
+    type: nfs
+    server: 10.6.64.10
+    path: /mnt/vader/media/library
+    targetSelector:
+      main:
+        main:
+          mountPath: /media

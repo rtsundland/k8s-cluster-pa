@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: radarr4k
+  namespace: radarr4k
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`radarr4k.apps.home.sundland.net`)
+      services:
+        - name: radarr4k
+          port: 7878
+          scheme: http
+
+  tls: { }
+
+---
+
