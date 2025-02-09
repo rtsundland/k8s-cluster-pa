@@ -31,7 +31,7 @@ kubectl label --overwrite ns <namespacee> pod-security.kubernetes.io/enforce=pri
 ### Configure pod/deployment to use the tun interface
 For deployments that require use of the tun interface, add the following to ... the pod resource spec (helm values.yaml?)
 ```
-requests:
+resources:
   limits:
     squat.ai/tun: "1"
 ```
