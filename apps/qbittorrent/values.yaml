@@ -1,0 +1,42 @@
+
+persistence:
+  config:
+    type: pvc
+    existingClaim: qbittorrent-config
+
+  downloads:
+    enabled: true
+    type: nfs
+    server: 10.6.64.10
+    path: /mnt/vader/media/downloads
+    targetSelector:
+      main:
+        main:
+          mountPath: /downloads
+
+# needed to enable tun interface on Talos
+resources:
+  limits:
+    squat.ai/tun: "1"
+
+addons:
+  vpn:
+    type: gluetun
+    killSwitch: true
+    excludeNetworks_IPv4:
+      - "10.0.0.0/8"
+    excludeNetworks_IPv6: []
+    env:
+      VPN_SERVICE_PROVIDER: "protonvpn"
+      VPN_PORT_FORWARDING: "on"
+      VPN_TYPE: "openvpn"
+      OPENVPN_USER: "[USERNAME-HERE]"
+      OPENVPN_PASSWORD: "[PASSWORD-HERE]"
+      OPENVPN_MSSFIX: "1320"
+      DNS_KEEP_NAMESERVER: "off"
+      DOT: "on"
+      DOT_PROVIDERS: "cloudflare"
+      SERVER_COUNTRIES: "Switzerland"
+      PORT_FORWARD_ONLY: "on"
+
+
