@@ -3,7 +3,7 @@
 Make sure to review the README.md under apps/ for configuration pre-requisites for the VPN
 
 > [!NOTE]
-> Edit values.yaml to include your OpeNVPN credentials to enable the tunnel before proceeding!!!!
+> Edit values.yaml to include your OpenVPN credentials to enable the tunnel before proceeding!!!!
 >
 ```
 kubectl create ns qbittorrent
