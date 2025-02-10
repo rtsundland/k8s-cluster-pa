@@ -32,6 +32,6 @@ Within the qBittorrent configuration options UI (Tools > Operations)
 * Set `Encryption Mode` to `Allow encryption`
 
 3. Under the *Advanced* tb
-* Set `Network Interface1 to `tun0`
+* Set `Network Interface` to `tun0`
 
 
