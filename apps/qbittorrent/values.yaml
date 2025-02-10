@@ -25,18 +25,21 @@ addons:
     killSwitch: true
     excludeNetworks_IPv4:
       - "10.0.0.0/8"
+      - "172.16.0.0/12"
     excludeNetworks_IPv6: []
     env:
       VPN_SERVICE_PROVIDER: "protonvpn"
       VPN_PORT_FORWARDING: "on"
+      VPN_INTERFACE: tun0
       VPN_TYPE: "openvpn"
-      OPENVPN_USER: "[USERNAME-HERE]"
-      OPENVPN_PASSWORD: "[PASSWORD-HERE]"
+      VPN_PORT_FORWARDING_PROVIDER: "protonvpn"
+      OPENVPN_USER: "[USERNAME]+pmp"  # append +pmp to get UPnP/NAT-PMP
+      OPENVPN_PASSWORD: "[PASSWORD]"
       OPENVPN_MSSFIX: "1320"
-      DNS_KEEP_NAMESERVER: "off"
-      DOT: "on"
-      DOT_PROVIDERS: "cloudflare"
-      SERVER_COUNTRIES: "Switzerland"
-      PORT_FORWARD_ONLY: "on"
+      SERVER_COUNTRIES: Switzerland
+      PORT_FORWARD_ONLY: on
+      FIREWALL: on
+      DNS_KEEP_NAMESERVER: off
+      DOT: on
 
 
