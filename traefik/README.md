@@ -36,9 +36,15 @@ traefik-metrics   ClusterIP      10.103.209.81    <none>        9180/TCP        
 traefik-tcp       LoadBalancer   10.103.203.158   10.6.64.70    80:32372/TCP,443:32726/TCP   9h
 ```
 
-## Create an ingress for the dashboard
-This creates an ingress to service/traefik to review the dashboard.
+# Traefik IngressClass
+We will need to manually create a default ingressClass for Traefik to be used to define ingressRoutes
 ```
-kubectl -n tc-traefik create -f dashboard.ingress.yaml
+kubectl -n tc-traefik apply -f traefik.ingressclass.yaml
+```
+
+## Create an ingress for the dashboard
+We will not create an ingressRoute for the traefik internal dashboard.  This will replace the one created by the helm chart, but that's ok.
+```
+kubectl -n tc-traefik apply -f traefik-dashboard.ingressroute.yaml
 ```
 
