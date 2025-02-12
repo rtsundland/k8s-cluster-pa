@@ -2,3 +2,4 @@ cluster/controlplane.yaml
 cluster/worker.yaml
 cluster/talosconfig
 *.secret
+values.default.yaml

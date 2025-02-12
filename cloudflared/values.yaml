@@ -1,0 +1,7 @@
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          env:
+            TUNNEL_TOKEN: "${TUNNEL_TOKEN}"
