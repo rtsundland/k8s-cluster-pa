@@ -14,3 +14,10 @@ tlsStore:
   default:
     defaultCertificate:
       secretName: certificate-issuer-apps-cluster-cert
+
+#
+# Adding the entrypoints.websecure.forwardedHeaders switch
+additionalArguments:
+  - "--serverstransport.insecureskipverify=true"
+  - "--providers.kubernetesingress.allowexternalnameservices=true"
+  - "--entryPoints.websecure.forwardedHeaders.trustedIPs=10.244.0.0/16"
