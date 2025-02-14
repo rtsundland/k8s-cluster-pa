@@ -48,6 +48,7 @@ EOF
 
 velero install \
 	-n velero \
+	--use-node-agent \
 	--features=EnableCSI \
 	--provider aws \
 	--plugins velero/velero-plugin-for-aws:v1.11.0 \
