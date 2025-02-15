@@ -2,6 +2,11 @@
 ingress:
   enabled: false
 
+#
+# get the plexpass image, 'latest' is the public version
+image:
+  tag: "plexpass"
+
 pms:
   # -- The storage class to use when provisioning the pms config volume
   # this needs to be created manually, null will use the default
@@ -9,10 +14,6 @@ pms:
 
   # -- The volume size to provision for the PMS database
   configStorage: 20Gi
-
-  # -- Name of an existing `PersistentVolumeClaim` for the PMS database
-  # NOTE: When set, 'configStorage' and 'storageClassName' are ignored.
-  configExistingClaim: ""
 
   # -- Add kubernetes liveness probe to pms container.
   livenessProbe:
