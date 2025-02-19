@@ -1,8 +1,8 @@
 nextcloud:
   # Initial Credentials
   credentials:
-    initialAdminUser: ${ADMIN_USERNAME}
-    initialAdminPassword: ${ADMIN_PASSWORD}
+    initialAdminUser: admin
+    initialAdminPassword: changeme
   # General settings
   general:
     default_phone_region: US
@@ -94,14 +94,14 @@ nextcloud:
 persistence:
   config:
     type: pvc
-    size: 2Gi
+    size: 100Mi
     storageClass: vader-replicated
     retain: true
 
   html:
     type: pvc
     size: 10Gi
-    storageClass: vader-single
+    storageClass: kenobi-replicated
     retain: true
 
   data:
@@ -110,15 +110,15 @@ persistence:
     server: 10.6.64.10
     path: /mnt/vader/nextcloud30
 
-  data-old:
-    enabled: true
-    type: nfs
-    server: 10.6.64.10
-    path: /mnt/vader/nextcloud
-    targetSelector:
-      main:
-        main:
-          mountPath: /mnt/nextcloud-old
+      #  data-old:
+      #    enabled: true
+      # type: nfs
+      # server: 10.6.64.10
+      # path: /mnt/vader/nextcloud
+      # targetSelector:
+      #main:
+      #  main:
+      #    mountPath: /mnt/nextcloud-old
 
       #backup:
     #enabled: true
@@ -136,18 +136,48 @@ persistence:
 cnpg:
   main:
     database: nextcloud
-    owner: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    owner: nextcloud
+    password: vtAQTs1onX1IRlnNmnh88mES2p2ELnxdSuNwu1WDZOko30aG0Z
     cluster:
       instances: 2
       storage:
         size: 20Gi
         storageClass: kenobi-single
         pvcRetain: true
+        labels:
+          velero.io/exclude-from-backup: "true"
       walStorage:
-        size: 1Gi
+        size: 20Gi
         storageClass: kenobi-single
         pvcRetain: true
+        labels:
+          velero.io/exclude-from-backup: "true"
+
+    #
+    # RECOVERY
+    # set
+    #   .cnpg.main.mode: recovery
+    #   .cnpg.main.recovery.revision: <value or backups.revision>
+    #   .cnpg.main.backups.revision: <current value + 1>
+    mode: standalone
+    backups:
+      enabled: true
+      revision: "1"
+      encryption:
+        enabled: false
+
+      scheduledBackups:
+      - name: daily-backup
+        schedule: "0 20 2 * * *"
+        backupOwnerReference: self
+        immediate: true
+        suspend: false
+
+      credentials: ""   # replaced by setup script
+
+    recovery:
+      credentials: "" # replaced by setup script
+
 
 redis:
   enabled: true
@@ -171,17 +201,11 @@ ingress:
   main:
     enabled: true
     required: false
-    hosts:
-      - host: nextcloud.apps.home.sundland.net
-      - host: nextcloud.home.sundland.net
-      - host: nextcloud.sundland.net
+    hosts: []
 
     tls: 
-      - hosts:
-        - nextcloud.apps.home.sundland.net
-        - nextcloud.home.sundland.net
-        - nextcloud.sundland.net
-        secretName: nextcloud-tls-0
+      - hosts: []
+        # secretName: nextcloud-tls-0
 
     integrations:
       certManager:
