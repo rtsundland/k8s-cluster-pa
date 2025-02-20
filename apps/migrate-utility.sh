@@ -104,5 +104,5 @@ fi
 overrides=$(jq -n "${jqfilter}")
 #exit
 
-kubectl -n ${namespace} run -i --rm ${podName} --image="${baseImage}"  --overrides="${overrides}" 2>/dev/null
+kubectl -n ${namespace} run -i --rm ${podName} --image="${baseImage}"  --overrides="${overrides}"
 
