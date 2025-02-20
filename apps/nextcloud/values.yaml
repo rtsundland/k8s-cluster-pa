@@ -178,15 +178,6 @@ cnpg:
     recovery:
       credentials: "" # replaced by setup script
 
-cronjobs:
-  # Don't change names, it's used in the persistence
-  - name: nextcloud-maintenance
-    enabled: true
-    schedule: "0 2 * * *"
-    cmd:
-      - echo "Starting maintenance window"
-      - occ maintenance:mode --on
-
 redis:
   enabled: true
   includeCommon: true
