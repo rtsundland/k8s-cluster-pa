@@ -14,14 +14,6 @@ service:
       metallb.io/address-pool: app-pool
       metallb.io/loadBalancerIPs: 10.6.64.60
 
-    ports:
-      default:
-        enabled: true
-        port: 443
-        protocol: https
-        targetPort: 22891
-
-
 #
 # sets the default certificate to the one created by clusterissuer
 #    certificate-issuer-<name>
