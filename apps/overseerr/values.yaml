@@ -1,0 +1,24 @@
+
+persistence:
+  config:
+    type: pvc
+    size: 100Mi
+    storageClass: kenobi-single
+    retain: true
+
+ingress:
+  main:
+    enabled: true
+    required: false
+    hosts:
+      - host: overseerr.apps.home.sundland.net
+
+    tls: 
+      - hosts:
+        - overseerr.apps.home.sundland.net
+
+    integrations:
+      traefik:
+        entrypoints:
+          - websecure
+        forceTLS: true
