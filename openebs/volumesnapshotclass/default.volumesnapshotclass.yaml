@@ -4,5 +4,6 @@ metadata:
   name: csi-mayastor-snapshotclass
   annotations:
     snapshot.storage.kubernetes.io/is-default-class: "true"
+    velero.io/csi-volumesnapshot-class: "true"
 driver: io.openebs.csi-mayastor
 deletionPolicy: Delete

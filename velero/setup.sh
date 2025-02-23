@@ -48,8 +48,9 @@ EOF
 
 velero install \
 	-n velero \
-	--use-node-agent \
 	--features=EnableCSI \
+	--use-node-agent \
+	--use-volume-snapshots=true \
 	--provider aws \
 	--plugins velero/velero-plugin-for-aws:v1.11.0 \
 	--secret-file "${CREDFILE}" \

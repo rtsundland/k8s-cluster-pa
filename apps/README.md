@@ -87,6 +87,9 @@ spec:
       storage: 20G
 ```
 
+## Scheduling Snapshots
+See the [snapshotscheduler README](../snapshotscheduler/README.md)
+
 ## Scheduling Backups
 Pending
 
