@@ -1,0 +1,17 @@
+apiVersion: snapscheduler.backube/v1
+kind: SnapshotSchedule
+metadata:
+  name: weekly
+spec:
+  disabled: false
+  claimSelector:
+    matchLabels:
+      snapshotschedule: weekly
+  retention:
+    expires: "2016h"  # 12 weeks
+  schedule: "0 5 * * 0" # midnight ETC
+  snapshotTemplate:
+    labels:
+      snapshotschedule: weekly
+
+---

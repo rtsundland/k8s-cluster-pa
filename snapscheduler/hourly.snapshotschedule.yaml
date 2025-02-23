@@ -1,0 +1,16 @@
+apiVersion: snapscheduler.backube/v1
+kind: SnapshotSchedule
+metadata:
+  name: hourly
+spec:
+  disabled: false
+  claimSelector:
+    matchLabels:
+      snapshotschedule: hourly
+  retention:
+    expires: "48h"  # 48 hours
+  schedule: "0 * * * *"
+  snapshotTemplate:
+    labels:
+      snapshotschedule: hourly
+---
