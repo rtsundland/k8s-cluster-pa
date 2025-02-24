@@ -8,6 +8,5 @@
 7.  [Traefik](traefik/)
 8.  [Cloudnative Postgres (CNPG)](cnpg/)
 9.  [Velero](velero/)
-10.	[Snapscheduler](snapscheduler/)
-11. [Cloudflare](cloudflared/)
-12. [Apps](apps/)
+10. [Cloudflare](cloudflared/)
+11. [Apps](apps/)
