@@ -1,0 +1,15 @@
+persistence:
+  config:
+    enabled: true
+    type: pvc
+    existingClaim: recyclarr-config
+
+addons:
+  codeserver:
+    enabled: true
+    service:
+      type: "ClusterIP"
+      ports:
+        codeserver:
+          port: 45390
+

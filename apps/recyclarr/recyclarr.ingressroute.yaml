@@ -1,0 +1,19 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: recyclarr
+  namespace: recyclarr
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`cs-recyclarr.apps.home.sundland.net`)
+      services:
+        - name: recyclarr
+          port: 45390
+          scheme: http
+  tls: { }
+
+---
+
