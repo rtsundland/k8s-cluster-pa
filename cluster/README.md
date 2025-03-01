@@ -4,7 +4,9 @@
 https://www.talos.dev/v1.9/introduction/getting-started/
 
 ## Background
-This cluster is built using TrueNAS virtual machines using the base metal Talos Linux install .iso.  There are 3 nodes that act as both control plane and worker, so certain configuration changes are needed to ensure the CP nodes can also act as workstation nodes that are covered within the **cluster-patch.yaml**.
+This cluster is built using TrueNAS virtual machines using the base metal Talos Linux install .iso.  There are 3 control plane nodes and 3 worker nodes
+
+In certain configurations, changes are needed to ensure the CP nodes can also act as workstation nodes that are covered within the **cluster-patch.yaml**.
 
 This path ensures we can run pods on the CPs
 ```
@@ -18,36 +20,35 @@ This allows *metallb* LoadBalancers to run on CPs.  By default, this setting is 
 ```
 
 ## VM Configuration
+### CPU and Memory
 
-### Control Plane Nodes
+| Node Type | CPU Sockets | CPU Cores | CPU Threads | Memory | Count |
+|-----------|-------------|-----------|-------------|--------|-------|
+| Control Plane | 1 | 2 | 2 | 4GB | 3 |
+| Worker | 1 | 2 | 8 | 32GB | 3 |
 
-**CPU And Memory**
+### Disk Configuration
+Both Control Plane and Worker Nodes have a base 100GiB filesystem per Talos recommendation.
 
-- CPU: 1x Socket, 4x Cores, 2x Threads
-- CPU Mode: Host Model 
-- Memory: 16GB
+The workers have additional disks attached which are then passed to OpenEBS (mayastor) for replicated storage.
 
-**Disk Configuration**
+All disks are mounted to the TrueNAS VM's using VirtIO.
 
-Use *VirtIO* Mode for all Disks
+| Node Type | Disk Description | Order | Talos Device Name | Size |
+|----------|---------|----------|---------- |--------|
+| C/W | Talos Installation | 1001 | /dev/vda | 100 GiB |
+| W | Hot Application Pool | 1002 | /dev/vdb | 250GiB | 
+| W | Warm Application Pool | 1003 | /dev/vdc | 1 TiB |
 
-| Disk Description | Order | Talos Device Name | Size |
-|----------|---------|----------|---------- |
-| Install | 1001 | /dev/vda | 100 GiB |
-| Local PVs | 1002 | /dev/vdb | 100 GiB |
-| Replicated PVs | 1003 | /dev/vdc | 250 GiB |
+Within OpenEBS you will see how *vdb* and *vdc* are used to create replicated and non-replicated persistent volumes.
 
-**NIC Configuration**
+### NIC Configuration
 
 Use *VirtIO* Mode for all NICs
 
 | Order | Talos Device Name |
 | ----- | ----- |
 | 1004 | ens3 |
-| 1005 | ens4 |
-
-### Worker Nodes
-- No dedicated Worker nodes
 
 Instructions for building a fresh Talos cluster can be found here: https://www.talos.dev/v1.9/introduction/getting-started/
 
@@ -68,9 +69,12 @@ The VM's will boot with DHCP, if static leases are not configured, you'll need t
 
 | Hostname | IP Address |
 | --------------- | --------------- |
-| talos-pa-1 | 10.6.64.21 |
-| talos-pa-2 | 10.6.64.22 |
-| talos-pa-3 | 10.6.64.23 |
+| talos-pa-c1 | 10.6.64.21 |
+| talos-pa-c2 | 10.6.64.22 |
+| talos-pa-c3 | 10.6.64.23 |
+| talos-pa-w1 | 10.6.64.24 |
+| talos-pa-w2 | 10.6.64.25 |
+| talos-pa-w3 | 10.6.64.26 |
 
 ## Deploy Control Plane Nodes
 
@@ -99,7 +103,7 @@ This updates ensures we don't have to add -e <ip> to every talosctl command.
 context: talos-pa
 contexts:
     talos-pa:
-        endpoints: [ 10.6.64.21, 10.6.64.22, 10.6.64.23 ]
+        endpoints: [ 10.6.64.21, 10.6.64.22, 10.6.64.23, 10.6.64.24, 10.6.64.25, 10.6.64.26 ]
 ```
 
 ## Verify Node Ready
@@ -109,9 +113,9 @@ kubectl get nodes
 Output:
 ```
 NAME         STATUS   ROLES           AGE     VERSION
-talos-pa-1   Ready    control-plane   2d21h   v1.32.0
-talos-pa-2   Ready    control-plane   2d21h   v1.32.0
-talos-pa-3   Ready    control-plane   2d21h   v1.32.0
+talos-pa-c1   Ready    control-plane   31d   v1.32.0
+talos-pa-c2   Ready    control-plane   31d   v1.32.0
+talos-pa-c3   Ready    control-plane   31d   v1.32.0
 ```
 
 ## Deploy Worker Nodes
@@ -124,3 +128,20 @@ talosctl apply-config --insecure -n 10.6.64.21 \
   --config-patch '[{"op": "add", "path": "/machine/network/hostname", "value": "talos-pa-w1"}]' \
   --file worker.yaml
 ```
+
+## Verify Worker Nodes are Ready
+```
+kubectl get nodes
+```
+Output
+```
+k get nodes
+NAME          STATUS   ROLES           AGE   VERSION
+talos-pa-c1   Ready    control-plane   31d   v1.32.0
+talos-pa-c2   Ready    control-plane   31d   v1.32.0
+talos-pa-c3   Ready    control-plane   31d   v1.32.0
+talos-pa-w1   Ready    <none>          31d   v1.32.0
+talos-pa-w2   Ready    <none>          31d   v1.32.0
+talos-pa-w3   Ready    <none>          31d   v1.32.0
+```
+
