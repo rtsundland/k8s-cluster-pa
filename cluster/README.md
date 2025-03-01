@@ -42,6 +42,10 @@ All disks are mounted to the TrueNAS VM's using VirtIO.
 
 Within OpenEBS you will see how *vdb* and *vdc* are used to create replicated and non-replicated persistent volumes.
 
+Hot and Warm just coorespond to NVME Drives vs traditional HD drives (spinsters).  There is a need for both.
+
+Additionally, some charts will use NFS to mount from TrueNAS Scale directly.  Plan to add a *Cold* pool using NFS in the future.
+
 ### NIC Configuration
 
 Use *VirtIO* Mode for all NICs
