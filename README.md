@@ -55,11 +55,12 @@ were available via NFS, but I wanted to move them to PVCs or when I migrated my 
 Cloudflare Zero Trust for all app access
 
 For *core* deployments, in no particular order...
+- Enable NFS CSI driver
 - Complete backup configuration documentation, particularly around scheduling
 - Research Calico for microsegmentation
 - Spend more time understanding Traefik
 - Configure prometheus properly
-- Dedicated hardware instead of VMs
+- Dedicated hardware instead of VMs (req's NFS CSI driver)
 - Minio Operator and Tenants
 
 For *app* deployments, also in no particular order...
