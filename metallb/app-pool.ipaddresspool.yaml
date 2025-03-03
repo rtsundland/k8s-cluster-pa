@@ -5,6 +5,6 @@ metadata:
   namespace: metallb
 spec:
   addresses:
-  - 10.6.64.66-10.6.64.126
-  autoAssign: false
-  avoidBuggyIPs: true
+  - 10.6.64.50-10.6.64.62
+  autoAssign: true
+  avoidBuggyIPs: false
