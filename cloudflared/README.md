@@ -5,6 +5,6 @@ Go to Cloudflare Zero Trust and create a new Tunnel configuration (Networks > Tu
 
 Then run the following command:
 ```
-(source cloudflared.secret && envsubst < values.yaml) | helm install --create-namespace -n cloudflared cloudflared oci://tccr.io/truecharts/cloudflared -f -
+(source cloudflared.secret && envsubst < values.yaml) | helm upgrade --install --create-namespace -n cloudflared cloudflared oci://tccr.io/truecharts/cloudflared -f -
 ```
 

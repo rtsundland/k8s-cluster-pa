@@ -33,8 +33,8 @@ addons:
       VPN_INTERFACE: tun0
       VPN_TYPE: "openvpn"
       VPN_PORT_FORWARDING_PROVIDER: "protonvpn"
-      OPENVPN_USER: "[USERNAME]+pmp"  # append +pmp to get UPnP/NAT-PMP
-      OPENVPN_PASSWORD: "[PASSWORD]"
+      OPENVPN_USER: "$OPENVPN_USER+pmp"  # append +pmp to get UPnP/NAT-PMP
+      OPENVPN_PASSWORD: "$OPENVPN_PASSWORD"
       OPENVPN_MSSFIX: "1320"
       SERVER_COUNTRIES: Switzerland
       PORT_FORWARD_ONLY: on

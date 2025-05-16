@@ -37,32 +37,32 @@ pms:
 
 # -- A basic image that will convert the configmap to a file in the rclone config volume
 # this is ignored if rclone is not enabled
-initContainer:
-  script: |-
-    #!/bin/sh
+initContainer: {}
+#  script: |-
+#   #!/bin/sh
+#
+#    if [ ! -f "/backup/.restore" ]
+#    then  echo "[initContainer] performing normal startup"
+#          exit 0
+#    fi
+#
+#    # get the restore targz from /backup/forcerestore
+#    BACKUPFILE="/backup/$(cat /backup/.restore)"
+#    echo "[initContainer] restoring from backup file: ${BACKUPFILE}"
+#    if [ ! -f "${BACKUPFILE}" ]
+#    then  echo "[initContainer] backup file does not exist or not readable"
+#          exit 0
+#    fi
+#
+#    # if /config/Library exists, we will relocate it with a timestamp
+#   if [ -d "/config/Library" ]
+    #    then  RELOTS=$(date +%Y%m%d-%H%M%S)
+    #      mv -f "/config/Library" "/config/Library.${RELOTS}"
+    #fi
 
-    if [ ! -f "/backup/.restore" ]
-    then  echo "[initContainer] performing normal startup"
-          exit 0
-    fi
-
-    # get the restore targz from /backup/forcerestore
-    BACKUPFILE="/backup/$(cat /backup/.restore)"
-    echo "[initContainer] restoring from backup file: ${BACKUPFILE}"
-    if [ ! -f "${BACKUPFILE}" ]
-    then  echo "[initContainer] backup file does not exist or not readable"
-          exit 0
-    fi
-
-    # if /config/Library exists, we will relocate it with a timestamp
-    if [ -d "/config/Library" ]
-    then  RELOTS=$(date +%Y%m%d-%H%M%S)
-          mv -f "/config/Library" "/config/Library.${RELOTS}"
-    fi
-
-    tar -zvxf "${BACKUPFILE}" -C /config && rm -f "/backup/.restore"
-
-    echo "[initContainer] restore complete"
+  #    tar -zvxf "${BACKUPFILE}" -C /config && rm -f "/backup/.restore"
+  #
+  #  echo "[initContainer] restore complete"
 
 service:
   type: LoadBalancer

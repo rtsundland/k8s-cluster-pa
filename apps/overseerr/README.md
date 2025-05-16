@@ -3,7 +3,7 @@
 ## Installation
 This is a full TC install, no separate configurations
 ```
-helm install -n overseerr --create-namespace overseerr oci://tccr.io/truecharts/overseerr -f values.yaml
+helm upgrade --install -n overseerr --create-namespace overseerr oci://tccr.io/truecharts/overseerr -f values.yaml
 ```
 
 ## Migrate

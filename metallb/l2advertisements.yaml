@@ -6,4 +6,4 @@ metadata:
 spec:
   ipAddressPools:
   - app-pool
-  - admin-pool
+  - netserv

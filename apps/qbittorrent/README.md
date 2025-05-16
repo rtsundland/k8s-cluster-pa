@@ -14,7 +14,7 @@ This VPN configuration specifically works with ProtonVPN using OpenVPN connectiv
 kubectl create ns qbittorrent
 kubectl apply -f qbittorrent.pv.yaml
 kubectl apply -f qbittorrent.ingressroute.yaml
-helm install -n qbittorrent qbittorrent oci://tccr.io/truecharts/qbittorrent -f values.yaml
+(source openvpn.secret && envsubst < values.yaml) | helm upgrade --install -n qbittorrent qbittorrent oci://tccr.io/truecharts/qbittorrent -f -
 ```
 
 ## Configure qBittorrent
