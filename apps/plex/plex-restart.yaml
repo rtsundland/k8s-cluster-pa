@@ -1,0 +1,145 @@
+#
+# This enables plex to do a weekly restart, mostly just to ensure it is kept relatively up to date
+#
+---
+# ServiceAccount for the CronJob
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: service-restarter
+  namespace: plex # Change to your target namespace
+---
+# ClusterRole with permissions to read services and restart deployments
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: service-restarter
+rules:
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets", "daemonsets"]
+  verbs: ["get", "list", "patch"]
+---
+# ClusterRoleBinding to bind the role to the service account
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: service-restarter
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: service-restarter
+subjects:
+- kind: ServiceAccount
+  name: service-restarter
+  namespace: plex # Change to your target namespace
+---
+# CronJob that restarts workloads behind a service
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: weekly-service-restart
+  namespace: plex # Change to your target namespace
+spec:
+  # Schedule: Every Monday at 2:00 AM (0 2 * * 1)
+  schedule: "0 2 * * 1"
+  timeZone: "UTC"  # Adjust timezone as needed
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: service-restarter
+          restartPolicy: OnFailure
+          containers:
+          - name: kubectl
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo "Starting service restart process at $(date)"
+              
+              SERVICE_NAME="${SERVICE_NAME:-your-service-name}"
+              TARGET_NAMESPACE="${TARGET_NAMESPACE:-default}"
+              
+              echo "Looking up service: $SERVICE_NAME in namespace: $TARGET_NAMESPACE"
+              
+              # Get the service and its selector
+              SERVICE_SELECTOR=$(kubectl get service "$SERVICE_NAME" -n "$TARGET_NAMESPACE" -o jsonpath='{.spec.selector}' 2>/dev/null || echo "")
+              
+              if [ -z "$SERVICE_SELECTOR" ] || [ "$SERVICE_SELECTOR" = "null" ]; then
+                echo "ERROR: Service $SERVICE_NAME not found or has no selector"
+                exit 1
+              fi
+              
+              echo "Service selector: $SERVICE_SELECTOR"
+              
+              # Convert selector JSON to label selector format
+              LABEL_SELECTOR=$(echo "$SERVICE_SELECTOR" | jq -r 'to_entries | map("\(.key)=\(.value)") | join(",")')
+              echo "Label selector: $LABEL_SELECTOR"
+              
+              # Find deployments with matching labels
+              DEPLOYMENTS=$(kubectl get deployments -n "$TARGET_NAMESPACE" --selector="$LABEL_SELECTOR" -o name 2>/dev/null || echo "")
+              
+              # Find statefulsets with matching labels  
+              STATEFULSETS=$(kubectl get statefulsets -n "$TARGET_NAMESPACE" --selector="$LABEL_SELECTOR" -o name 2>/dev/null || echo "")
+              
+              # Find daemonsets with matching labels
+              DAEMONSETS=$(kubectl get daemonsets -n "$TARGET_NAMESPACE" --selector="$LABEL_SELECTOR" -o name 2>/dev/null || echo "")
+              
+              RESTART_COUNT=0
+              
+              # Restart deployments
+              if [ -n "$DEPLOYMENTS" ]; then
+                for deployment in $DEPLOYMENTS; do
+                  echo "Restarting $deployment"
+                  kubectl rollout restart "$deployment" -n "$TARGET_NAMESPACE"
+                  RESTART_COUNT=$((RESTART_COUNT + 1))
+                done
+              fi
+              
+              # Restart statefulsets
+              if [ -n "$STATEFULSETS" ]; then
+                for statefulset in $STATEFULSETS; do
+                  echo "Restarting $statefulset"
+                  kubectl rollout restart "$statefulset" -n "$TARGET_NAMESPACE"
+                  RESTART_COUNT=$((RESTART_COUNT + 1))
+                done
+              fi
+              
+              # Restart daemonsets
+              if [ -n "$DAEMONSETS" ]; then
+                for daemonset in $DAEMONSETS; do
+                  echo "Restarting $daemonset"
+                  kubectl rollout restart "$daemonset" -n "$TARGET_NAMESPACE"
+                  RESTART_COUNT=$((RESTART_COUNT + 1))
+                done
+              fi
+              
+              if [ $RESTART_COUNT -eq 0 ]; then
+                echo "WARNING: No workloads found matching service selector"
+                exit 1
+              fi
+              
+              echo "Successfully initiated restart for $RESTART_COUNT workload(s) behind service $SERVICE_NAME"
+              echo "Restart process completed at $(date)"
+            env:
+            - name: SERVICE_NAME
+              value: "plex-plex-media-server"  # Change this to your service name
+            - name: TARGET_NAMESPACE
+              value: "plex"  # Change this to your target namespace
+          # Optional: Add resource limits
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+  # Keep last 3 successful jobs and 1 failed job
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
